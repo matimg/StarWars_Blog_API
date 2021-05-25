@@ -36,7 +36,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.createPlanet = exports.getPlanets = exports.createPeople = exports.getPeoples = exports.getUsers = exports.createUser = void 0;
+exports.createPlanet = exports.getOnePlanet = exports.getPlanets = exports.createPeople = exports.getOnePeople = exports.getPeoples = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
@@ -96,6 +96,21 @@ var getPeoples = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.getPeoples = getPeoples;
+//OBTIENE UN PERSONAJE POR ID
+var getOnePeople = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var people;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(People_1.People).findOne(req.params.id_people)];
+            case 1:
+                people = _a.sent();
+                if (!people)
+                    throw new utils_1.Exception("People not exist");
+                return [2 /*return*/, res.json(people)];
+        }
+    });
+}); };
+exports.getOnePeople = getOnePeople;
 //CREA UN PERSONAJE
 var createPeople = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var peopleRepo, people, newPeople, results;
@@ -133,6 +148,21 @@ var getPlanets = function (req, res) { return __awaiter(void 0, void 0, void 0, 
     });
 }); };
 exports.getPlanets = getPlanets;
+//OBTIENE UN PLANETA POR ID
+var getOnePlanet = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var planet;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(Planet_1.Planet).findOne(req.params.id_planet)];
+            case 1:
+                planet = _a.sent();
+                if (!planet)
+                    throw new utils_1.Exception("Planet not exist");
+                return [2 /*return*/, res.json(planet)];
+        }
+    });
+}); };
+exports.getOnePlanet = getOnePlanet;
 //CREA UN PLANETA
 var createPlanet = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var planetRepo, planet, newPlanet, results;

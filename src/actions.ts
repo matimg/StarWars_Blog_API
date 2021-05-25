@@ -34,6 +34,13 @@ export const getPeoples = async (req: Request, res: Response): Promise<Response>
 		return res.json(peoples);
 }
 
+//OBTIENE UN PERSONAJE POR ID
+export const getOnePeople = async (req: Request, res: Response): Promise<Response> =>{
+        const people = await getRepository(People).findOne(req.params.id_people);
+        if(!people) throw new Exception("People not exist");
+		return res.json(people);
+}
+
 //CREA UN PERSONAJE
 export const createPeople = async (req: Request, res:Response): Promise<Response> =>{
 
@@ -56,6 +63,13 @@ export const getPlanets = async (req: Request, res: Response): Promise<Response>
 		return res.json(planets);
 }
 
+//OBTIENE UN PLANETA POR ID
+export const getOnePlanet = async (req: Request, res: Response): Promise<Response> =>{
+        const planet = await getRepository(Planet).findOne(req.params.id_planet);
+        if(!planet) throw new Exception("Planet not exist");
+		return res.json(planet);
+}
+
 //CREA UN PLANETA
 export const createPlanet = async (req: Request, res:Response): Promise<Response> =>{
 
@@ -65,7 +79,7 @@ export const createPlanet = async (req: Request, res:Response): Promise<Response
 	const planetRepo = getRepository(Planet)
 	// fetch for any user with this email
 	const planet = await planetRepo.findOne({ where: {name: req.body.name }})
-	if(planet) throw new Exception("Planet already exists with this name")
+	if(planet) throw new Exception("Planet already exists with this name");
 
 	const newPlanet = getRepository(Planet).create(req.body); 
 	const results = await getRepository(Planet).save(newPlanet);

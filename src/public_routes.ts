@@ -16,9 +16,11 @@ const router = Router();
 router.post('/user', safe(actions.createUser));
 //PERSONAJES
 router.get('/people', safe(actions.getPeoples));
+router.get('/people/:id_people', safe(actions.getOnePeople));
 router.post('/people', safe(actions.createPeople));
 //PLANETAS
 router.get('/planets', safe(actions.getPlanets));
+router.get('/planets/:id_planet', safe(actions.getOnePlanet));
 router.post('/planets', safe(actions.createPlanet));
 
 export default router;
