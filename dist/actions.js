@@ -218,10 +218,12 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
 exports.login = login;
 //OBTIENE TODOS LOS FAVORITOS DE UN USUARIO
 var getFavorites = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var favorites;
+    var user, favorites;
     return __generator(this, function (_a) {
         switch (_a.label) {
-            case 0: return [4 /*yield*/, typeorm_1.getRepository(Favorite_1.Favorite).find({ where: { user: req.user } })];
+            case 0:
+                user = req.user.id;
+                return [4 /*yield*/, typeorm_1.getRepository(Favorite_1.Favorite).find({ where: { user: req.user } })];
             case 1:
                 favorites = _a.sent();
                 return [2 /*return*/, res.json(favorites)];
@@ -231,16 +233,17 @@ var getFavorites = function (req, res) { return __awaiter(void 0, void 0, void 0
 exports.getFavorites = getFavorites;
 //AGREGA UN PERSONAJE A FAVORITOS
 var addPeopleFavorite = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var peopleRepo, userRepo, people, user, favoriteRepo, favorite, newFavorite, results;
+    var peopleRepo, userRepo, user_id, people, user, favoriteRepo, favorite, newFavorite, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 peopleRepo = typeorm_1.getRepository(People_1.People);
                 userRepo = typeorm_1.getRepository(Users_1.Users);
-                return [4 /*yield*/, peopleRepo.findOne({ where: { id: req.params.id_people } })];
+                user_id = req.user.id;
+                return [4 /*yield*/, peopleRepo.findOne(req.params.id_people)];
             case 1:
                 people = _a.sent();
-                return [4 /*yield*/, userRepo.findOne(req.user)];
+                return [4 /*yield*/, userRepo.findOne(user_id)];
             case 2:
                 user = _a.sent();
                 if (!people)

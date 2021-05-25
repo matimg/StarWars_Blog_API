@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { getRepository } from 'typeorm'  // getRepository"  traer una tabla de la base de datos asociada al objeto
+import { getRepository, ObjectLiteral } from 'typeorm'  // getRepository"  traer una tabla de la base de datos asociada al objeto
 import { Users } from './entities/Users'
 import { Exception } from './utils'
 import { People } from './entities/People'
@@ -104,6 +104,7 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
 
 //OBTIENE TODOS LOS FAVORITOS DE UN USUARIO
 export const getFavorites = async (req: Request, res: Response): Promise<Response> => {
+    const user = (req.user as ObjectLiteral).id;
     const favorites = await getRepository(Favorite).find({ where: { user: req.user } });
     return res.json(favorites);
 }
@@ -112,8 +113,9 @@ export const getFavorites = async (req: Request, res: Response): Promise<Respons
 export const addPeopleFavorite = async (req: Request, res: Response): Promise<Response> => {
     const peopleRepo = getRepository(People);
     const userRepo = getRepository(Users);
-    const people = await peopleRepo.findOne({ where: { id: req.params.id_people } });
-    const user = await userRepo.findOne(req.user);
+    const user_id = (req.user as ObjectLiteral).id;
+    const people = await peopleRepo.findOne(req.params.id_people);
+    const user = await userRepo.findOne(user_id);
     if(!people) throw new Exception("Not People found");
     if(!user) throw new Exception("Not User found");
 
