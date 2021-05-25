@@ -50,5 +50,8 @@ var verifyToken = function (req, res, next) {
     req.user = decoded;
     next();
 };
-router.get('/user', utils_1.safe(actions.getUsers));
+router.get('/user', verifyToken, utils_1.safe(actions.getUsers));
+//FAVORITOS
+router.get('/users/favorites', verifyToken, utils_1.safe(actions.getFavorites));
+router.post('/favorite/people/:people_id', verifyToken, utils_1.safe(actions.addPeopleFavorite));
 exports["default"] = router;

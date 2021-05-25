@@ -26,6 +26,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 exports.__esModule = true;
 exports.People = void 0;
 var typeorm_1 = require("typeorm");
+var Favorite_1 = require("./Favorite");
 var People = /** @class */ (function (_super) {
     __extends(People, _super);
     function People() {
@@ -75,6 +76,10 @@ var People = /** @class */ (function (_super) {
         typeorm_1.Column(),
         __metadata("design:type", String)
     ], People.prototype, "urlImage");
+    __decorate([
+        typeorm_1.OneToMany(function () { return Favorite_1.Favorite; }, function (favorite) { return favorite.people; }),
+        __metadata("design:type", Array)
+    ], People.prototype, "favorite");
     People = __decorate([
         typeorm_1.Entity()
     ], People);

@@ -39,13 +39,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.login = exports.createPlanet = exports.getOnePlanet = exports.getPlanets = exports.createPeople = exports.getOnePeople = exports.getPeoples = exports.getUsers = exports.createUser = void 0;
+exports.addPeopleFavorite = exports.getFavorites = exports.login = exports.createPlanet = exports.getOnePlanet = exports.getPlanets = exports.createPeople = exports.getOnePeople = exports.getPeoples = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
 var People_1 = require("./entities/People");
 var Planet_1 = require("./entities/Planet");
 var jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+var Favorite_1 = require("./entities/Favorite");
 var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userRepo, user, newUser, results;
     return __generator(this, function (_a) {
@@ -209,9 +210,53 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
                 user = _a.sent();
                 if (!user)
                     throw new utils_1.Exception("Invalid email or password", 401);
-                token = jsonwebtoken_1["default"].sign({ user: user }, process.env.JWT_KEY, { expiresIn: 60 * 60 });
+                token = jsonwebtoken_1["default"].sign({ user: user }, process.env.JWT_KEY);
                 return [2 /*return*/, res.json({ user: user, token: token })];
         }
     });
 }); };
 exports.login = login;
+//OBTIENE TODOS LOS FAVORITOS DE UN USUARIO
+var getFavorites = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var favorites;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(Favorite_1.Favorite).find({ where: { user: req.user } })];
+            case 1:
+                favorites = _a.sent();
+                return [2 /*return*/, res.json(favorites)];
+        }
+    });
+}); };
+exports.getFavorites = getFavorites;
+//AGREGA UN PERSONAJE A FAVORITOS
+var addPeopleFavorite = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var peopleRepo, userRepo, people, user, favoriteRepo, favorite, newFavorite, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                peopleRepo = typeorm_1.getRepository(People_1.People);
+                userRepo = typeorm_1.getRepository(Users_1.Users);
+                return [4 /*yield*/, peopleRepo.findOne({ where: { id: req.params.id_people } })];
+            case 1:
+                people = _a.sent();
+                return [4 /*yield*/, userRepo.findOne(req.user)];
+            case 2:
+                user = _a.sent();
+                if (!people)
+                    throw new utils_1.Exception("Not People found");
+                if (!user)
+                    throw new utils_1.Exception("Not User found");
+                favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
+                favorite = new Favorite_1.Favorite();
+                favorite.user = user;
+                favorite.people = people;
+                newFavorite = typeorm_1.getRepository(Favorite_1.Favorite).create(favorite);
+                return [4 /*yield*/, typeorm_1.getRepository(Favorite_1.Favorite).save(newFavorite)];
+            case 3:
+                results = _a.sent();
+                return [2 /*return*/, res.json(results)];
+        }
+    });
+}); };
+exports.addPeopleFavorite = addPeopleFavorite;

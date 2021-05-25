@@ -2,6 +2,7 @@ import {
     Entity, Column, PrimaryGeneratedColumn,
     BaseEntity, JoinTable, OneToMany
 } from 'typeorm';
+import { Favorite } from './Favorite';
 
 @Entity()
 export class People extends BaseEntity {
@@ -37,4 +38,7 @@ export class People extends BaseEntity {
 
     @Column()
     urlImage: string;
+
+    @OneToMany(() => Favorite, favorite => favorite.people)
+    favorite: Favorite[];
 }

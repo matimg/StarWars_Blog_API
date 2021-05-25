@@ -31,6 +31,9 @@ const verifyToken= (req: Request,res:Response, next:NextFunction) =>{
     next()
 }
 
-router.get('/user', safe(actions.getUsers));
+router.get('/user',verifyToken, safe(actions.getUsers));
+//FAVORITOS
+router.get('/users/favorites',verifyToken, safe(actions.getFavorites));
+router.post('/favorite/people/:people_id',verifyToken, safe(actions.addPeopleFavorite));
 
 export default router;
