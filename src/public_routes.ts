@@ -22,5 +22,7 @@ router.post('/people', safe(actions.createPeople));
 router.get('/planets', safe(actions.getPlanets));
 router.get('/planets/:id_planet', safe(actions.getOnePlanet));
 router.post('/planets', safe(actions.createPlanet));
+//LOGIN
+router.post('/login',safe(actions.login));
 
 export default router;

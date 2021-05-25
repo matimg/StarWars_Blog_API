@@ -4,6 +4,7 @@ import { Users } from './entities/Users'
 import { Exception } from './utils'
 import { People } from './entities/People'
 import { Planet } from './entities/Planet'
+import jwt from 'jsonwebtoken'
 
 export const createUser = async (req: Request, res:Response): Promise<Response> =>{
 
@@ -84,4 +85,18 @@ export const createPlanet = async (req: Request, res:Response): Promise<Response
 	const newPlanet = getRepository(Planet).create(req.body); 
 	const results = await getRepository(Planet).save(newPlanet);
 	return res.json(results);
+}
+
+//LOGIN- DEVUELVE UN TOKEN DE AUTORIZACION AL USUARIO
+export const login = async (req: Request, res: Response): Promise<Response> =>{
+		
+	if(!req.body.email) throw new Exception("Please specify an email on your request body", 400);
+    if(!req.body.password) throw new Exception("Please specify a password on your request body", 400);
+    
+	const userRepo = await getRepository(Users);
+	const user = await userRepo.findOne({ where: { email: req.body.email, password: req.body.password }});
+    if(!user) throw new Exception("Invalid email or password", 401);
+    
+	const token = jwt.sign({ user }, process.env.JWT_KEY as string, { expiresIn: 60 * 60 });
+	return res.json({ user, token });
 }
