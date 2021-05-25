@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 import { getRepository } from 'typeorm'  // getRepository"  traer una tabla de la base de datos asociada al objeto
 import { Users } from './entities/Users'
 import { Exception } from './utils'
+import { People } from './entities/People'
 
 export const createUser = async (req: Request, res:Response): Promise<Response> =>{
 
@@ -24,4 +25,26 @@ export const createUser = async (req: Request, res:Response): Promise<Response> 
 export const getUsers = async (req: Request, res: Response): Promise<Response> =>{
 		const users = await getRepository(Users).find();
 		return res.json(users);
+}
+
+//OBTIENE TODOS LOS PERSONAJES
+export const getPeoples = async (req: Request, res: Response): Promise<Response> =>{
+		const peoples = await getRepository(People).find();
+		return res.json(peoples);
+}
+
+//CREA UN PERSONAJE
+export const createPeople = async (req: Request, res:Response): Promise<Response> =>{
+
+	// important validations to avoid ambiguos errors, the client needs to understand what went wrong
+	if(!req.body.name) throw new Exception("Please provide a name")
+
+	const peopleRepo = getRepository(People)
+	// fetch for any user with this email
+	const people = await peopleRepo.findOne({ where: {name: req.body.name }})
+	if(people) throw new Exception("People already exists with this name")
+
+	const newPeople = getRepository(People).create(req.body); 
+	const results = await getRepository(People).save(newPeople);
+	return res.json(results);
 }

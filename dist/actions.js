@@ -36,10 +36,11 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 exports.__esModule = true;
-exports.getUsers = exports.createUser = void 0;
+exports.createPeople = exports.getPeoples = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
+var People_1 = require("./entities/People");
 var createUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userRepo, user, newUser, results;
     return __generator(this, function (_a) {
@@ -81,3 +82,40 @@ var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
     });
 }); };
 exports.getUsers = getUsers;
+//OBTIENE TODOS LOS PERSONAJES
+var getPeoples = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var peoples;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(People_1.People).find()];
+            case 1:
+                peoples = _a.sent();
+                return [2 /*return*/, res.json(peoples)];
+        }
+    });
+}); };
+exports.getPeoples = getPeoples;
+//CREA UN PERSONAJE
+var createPeople = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var peopleRepo, people, newPeople, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                // important validations to avoid ambiguos errors, the client needs to understand what went wrong
+                if (!req.body.name)
+                    throw new utils_1.Exception("Please provide a name");
+                peopleRepo = typeorm_1.getRepository(People_1.People);
+                return [4 /*yield*/, peopleRepo.findOne({ where: { name: req.body.name } })];
+            case 1:
+                people = _a.sent();
+                if (people)
+                    throw new utils_1.Exception("People already exists with this name");
+                newPeople = typeorm_1.getRepository(People_1.People).create(req.body);
+                return [4 /*yield*/, typeorm_1.getRepository(People_1.People).save(newPeople)];
+            case 2:
+                results = _a.sent();
+                return [2 /*return*/, res.json(results)];
+        }
+    });
+}); };
+exports.createPeople = createPeople;
