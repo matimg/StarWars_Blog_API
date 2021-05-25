@@ -3,6 +3,7 @@ import { getRepository } from 'typeorm'  // getRepository"  traer una tabla de l
 import { Users } from './entities/Users'
 import { Exception } from './utils'
 import { People } from './entities/People'
+import { Planet } from './entities/Planet'
 
 export const createUser = async (req: Request, res:Response): Promise<Response> =>{
 
@@ -46,5 +47,27 @@ export const createPeople = async (req: Request, res:Response): Promise<Response
 
 	const newPeople = getRepository(People).create(req.body); 
 	const results = await getRepository(People).save(newPeople);
+	return res.json(results);
+}
+
+//OBTIENE TODOS LOS PLANETAS
+export const getPlanets = async (req: Request, res: Response): Promise<Response> =>{
+		const planets = await getRepository(Planet).find();
+		return res.json(planets);
+}
+
+//CREA UN PLANETA
+export const createPlanet = async (req: Request, res:Response): Promise<Response> =>{
+
+	// important validations to avoid ambiguos errors, the client needs to understand what went wrong
+	if(!req.body.name) throw new Exception("Please provide a name")
+
+	const planetRepo = getRepository(Planet)
+	// fetch for any user with this email
+	const planet = await planetRepo.findOne({ where: {name: req.body.name }})
+	if(planet) throw new Exception("Planet already exists with this name")
+
+	const newPlanet = getRepository(Planet).create(req.body); 
+	const results = await getRepository(Planet).save(newPlanet);
 	return res.json(results);
 }
