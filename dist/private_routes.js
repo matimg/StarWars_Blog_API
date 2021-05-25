@@ -53,5 +53,8 @@ var verifyToken = function (req, res, next) {
 router.get('/user', verifyToken, utils_1.safe(actions.getUsers));
 //FAVORITOS
 router.get('/users/favorites', verifyToken, utils_1.safe(actions.getFavorites));
+//FAVORITOS-PERSONAJES
 router.post('/favorite/people/:people_id', verifyToken, utils_1.safe(actions.addPeopleFavorite));
+//FAVORITOS PLANETAS
+router.post('/favorite/planet/:planet_id', verifyToken, utils_1.safe(actions.addPlanetFavorite));
 exports["default"] = router;

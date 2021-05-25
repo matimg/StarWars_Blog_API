@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.addPeopleFavorite = exports.getFavorites = exports.login = exports.createPlanet = exports.getOnePlanet = exports.getPlanets = exports.createPeople = exports.getOnePeople = exports.getPeoples = exports.getUsers = exports.createUser = void 0;
+exports.addPlanetFavorite = exports.addPeopleFavorite = exports.getFavorites = exports.login = exports.createPlanet = exports.getOnePlanet = exports.getPlanets = exports.createPeople = exports.getOnePeople = exports.getPeoples = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
@@ -218,13 +218,17 @@ var login = function (req, res) { return __awaiter(void 0, void 0, void 0, funct
 exports.login = login;
 //OBTIENE TODOS LOS FAVORITOS DE UN USUARIO
 var getFavorites = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, favorites;
+    var userRepo, user_id, user, favorites;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                user = req.user.id;
-                return [4 /*yield*/, typeorm_1.getRepository(Favorite_1.Favorite).find({ where: { user: req.user } })];
+                userRepo = typeorm_1.getRepository(Users_1.Users);
+                user_id = req.user.id;
+                return [4 /*yield*/, userRepo.findOne(user_id)];
             case 1:
+                user = _a.sent();
+                return [4 /*yield*/, typeorm_1.getRepository(Favorite_1.Favorite).find({ where: { user: user }, relations: ['people', 'planet'] })];
+            case 2:
                 favorites = _a.sent();
                 return [2 /*return*/, res.json(favorites)];
         }
@@ -263,3 +267,35 @@ var addPeopleFavorite = function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); };
 exports.addPeopleFavorite = addPeopleFavorite;
+//AGREGA UN PLANETA A FAVORITOS
+var addPlanetFavorite = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var planetRepo, userRepo, user_id, planet, user, favoriteRepo, favorite, newFavorite, results;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                planetRepo = typeorm_1.getRepository(Planet_1.Planet);
+                userRepo = typeorm_1.getRepository(Users_1.Users);
+                user_id = req.user.id;
+                return [4 /*yield*/, planetRepo.findOne(req.params.id_planet)];
+            case 1:
+                planet = _a.sent();
+                return [4 /*yield*/, userRepo.findOne(user_id)];
+            case 2:
+                user = _a.sent();
+                if (!planet)
+                    throw new utils_1.Exception("Not Planet found");
+                if (!user)
+                    throw new utils_1.Exception("Not User found");
+                favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
+                favorite = new Favorite_1.Favorite();
+                favorite.user = user;
+                favorite.planet = planet;
+                newFavorite = typeorm_1.getRepository(Favorite_1.Favorite).create(favorite);
+                return [4 /*yield*/, typeorm_1.getRepository(Favorite_1.Favorite).save(newFavorite)];
+            case 3:
+                results = _a.sent();
+                return [2 /*return*/, res.json(results)];
+        }
+    });
+}); };
+exports.addPlanetFavorite = addPlanetFavorite;

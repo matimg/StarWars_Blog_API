@@ -104,8 +104,10 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
 
 //OBTIENE TODOS LOS FAVORITOS DE UN USUARIO
 export const getFavorites = async (req: Request, res: Response): Promise<Response> => {
-    const user = (req.user as ObjectLiteral).id;
-    const favorites = await getRepository(Favorite).find({ where: { user: req.user } });
+    const userRepo = getRepository(Users);
+    const user_id = (req.user as ObjectLiteral).id;
+    const user = await userRepo.findOne(user_id);
+    const favorites = await getRepository(Favorite).find({ where: { user: user }, relations: ['people', 'planet']});
     return res.json(favorites);
 }
 
@@ -126,5 +128,23 @@ export const addPeopleFavorite = async (req: Request, res: Response): Promise<Re
     const newFavorite = getRepository(Favorite).create(favorite);  //Creo el favorito
     const results = await getRepository(Favorite).save(newFavorite); //Grabo el nuevo favorito
     return res.json(results);
+}
 
+//AGREGA UN PLANETA A FAVORITOS
+export const addPlanetFavorite = async (req: Request, res: Response): Promise<Response> => {
+    const planetRepo = getRepository(Planet);
+    const userRepo = getRepository(Users);
+    const user_id = (req.user as ObjectLiteral).id;
+    const planet = await planetRepo.findOne(req.params.id_planet);
+    const user = await userRepo.findOne(user_id);
+    if(!planet) throw new Exception("Not Planet found");
+    if(!user) throw new Exception("Not User found");
+
+    const favoriteRepo = getRepository(Favorite);
+    const favorite = new Favorite();
+    favorite.user = user;
+    favorite.planet = planet;
+    const newFavorite = getRepository(Favorite).create(favorite);  //Creo el favorito
+    const results = await getRepository(Favorite).save(newFavorite); //Grabo el nuevo favorito
+    return res.json(results);
 }

@@ -34,6 +34,9 @@ const verifyToken= (req: Request,res:Response, next:NextFunction) =>{
 router.get('/user',verifyToken, safe(actions.getUsers));
 //FAVORITOS
 router.get('/users/favorites',verifyToken, safe(actions.getFavorites));
+//FAVORITOS-PERSONAJES
 router.post('/favorite/people/:people_id',verifyToken, safe(actions.addPeopleFavorite));
+//FAVORITOS PLANETAS
+router.post('/favorite/planet/:planet_id',verifyToken, safe(actions.addPlanetFavorite));
 
 export default router;
