@@ -46,17 +46,24 @@ export const getOnePeople = async (req: Request, res: Response): Promise<Respons
 //CREA UN PERSONAJE
 export const createPeople = async (req: Request, res: Response): Promise<Response> => {
 
-    // important validations to avoid ambiguos errors, the client needs to understand what went wrong
-    if (!req.body.name) throw new Exception("Please provide a name")
-
-    const peopleRepo = getRepository(People)
-    // fetch for any user with this email
-    const people = await peopleRepo.findOne({ where: { name: req.body.name } })
-    if (people) throw new Exception("People already exists with this name")
-
-    const newPeople = getRepository(People).create(req.body);
-    const results = await getRepository(People).save(newPeople);
-    return res.json(results);
+    //VALIDO QUE EL BODY NO VENGA VACIO
+    /*console.log(req.body)
+    if(!req.body) throw new Exception("Please provide a body");*/
+    const peopleRepo = getRepository(People);
+    //RECORRO UNO A UNO LOS PERSONAJES DEL BODY
+    for(let i=0; i<req.body.length; i++){
+        //VALIDO QUE EL PERSONAJE DE LA POSICION i TENGA UN NOMBRE Y UNA DESCRIPCION
+        if (!req.body[i].name) throw new Exception("Please provide a name");
+        if (!req.body[i].description) throw new Exception("Please provide a description");
+        //VALIDO QUE EL NOMBRE DEL PERSONAJE NO EXISTA EN LA BASE DE DATOS
+        const people = await peopleRepo.findOne({ where: { name: req.body[i].name } });
+        if (people) throw new Exception("People already exists with this name:"+req.body[i].name);
+        //SI NO HAY ERRORES CREO EL NUEVO PERSONAJE CON LOS DATOS DE LA POSICION
+        const newPeople = getRepository(People).create(req.body[i]);
+        //GUARDO EN LA BASE DE DATOS EL PERSONAJE CREADO
+        const results = await getRepository(People).save(newPeople);
+    }
+    return res.json({"message":"peoples created"});
 }
 
 //OBTIENE TODOS LOS PLANETAS

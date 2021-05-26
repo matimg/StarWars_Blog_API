@@ -118,24 +118,34 @@ var getOnePeople = function (req, res) { return __awaiter(void 0, void 0, void 0
 exports.getOnePeople = getOnePeople;
 //CREA UN PERSONAJE
 var createPeople = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var peopleRepo, people, newPeople, results;
+    var peopleRepo, i, people, newPeople, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                // important validations to avoid ambiguos errors, the client needs to understand what went wrong
-                if (!req.body.name)
-                    throw new utils_1.Exception("Please provide a name");
                 peopleRepo = typeorm_1.getRepository(People_1.People);
-                return [4 /*yield*/, peopleRepo.findOne({ where: { name: req.body.name } })];
+                i = 0;
+                _a.label = 1;
             case 1:
+                if (!(i < req.body.length)) return [3 /*break*/, 5];
+                //VALIDO QUE EL PERSONAJE DE LA POSICION i TENGA UN NOMBRE Y UNA DESCRIPCION
+                if (!req.body[i].name)
+                    throw new utils_1.Exception("Please provide a name");
+                if (!req.body[i].description)
+                    throw new utils_1.Exception("Please provide a description");
+                return [4 /*yield*/, peopleRepo.findOne({ where: { name: req.body[i].name } })];
+            case 2:
                 people = _a.sent();
                 if (people)
-                    throw new utils_1.Exception("People already exists with this name");
-                newPeople = typeorm_1.getRepository(People_1.People).create(req.body);
+                    throw new utils_1.Exception("People already exists with this name:" + req.body[i].name);
+                newPeople = typeorm_1.getRepository(People_1.People).create(req.body[i]);
                 return [4 /*yield*/, typeorm_1.getRepository(People_1.People).save(newPeople)];
-            case 2:
+            case 3:
                 results = _a.sent();
-                return [2 /*return*/, res.json(results)];
+                _a.label = 4;
+            case 4:
+                i++;
+                return [3 /*break*/, 1];
+            case 5: return [2 /*return*/, res.json({ "message": "peoples created" })];
         }
     });
 }); };
