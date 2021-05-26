@@ -223,7 +223,7 @@ var getFavorites = function (req, res) { return __awaiter(void 0, void 0, void 0
         switch (_a.label) {
             case 0:
                 userRepo = typeorm_1.getRepository(Users_1.Users);
-                user_id = req.user.id;
+                user_id = req.user.user.id;
                 return [4 /*yield*/, userRepo.findOne(user_id)];
             case 1:
                 user = _a.sent();
@@ -237,23 +237,23 @@ var getFavorites = function (req, res) { return __awaiter(void 0, void 0, void 0
 exports.getFavorites = getFavorites;
 //AGREGA UN PERSONAJE A FAVORITOS
 var addPeopleFavorite = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var peopleRepo, userRepo, favoriteRepo, user_id, people, fav, user, favorite, newFavorite, results;
+    var peopleRepo, userRepo, favoriteRepo, user_id, people, user, fav, favorite, newFavorite, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 peopleRepo = typeorm_1.getRepository(People_1.People);
                 userRepo = typeorm_1.getRepository(Users_1.Users);
                 favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
-                user_id = req.user.id;
+                user_id = req.user.user.id;
                 return [4 /*yield*/, peopleRepo.findOne(req.params.people_id)];
             case 1:
                 people = _a.sent();
-                return [4 /*yield*/, favoriteRepo.findOne({ where: { people: people } })];
-            case 2:
-                fav = _a.sent();
                 return [4 /*yield*/, userRepo.findOne(user_id)];
-            case 3:
+            case 2:
                 user = _a.sent();
+                return [4 /*yield*/, favoriteRepo.findOne({ where: { people: people, user: user } })];
+            case 3:
+                fav = _a.sent();
                 if (!people)
                     throw new utils_1.Exception("Not People found");
                 if (!user)
@@ -274,23 +274,23 @@ var addPeopleFavorite = function (req, res) { return __awaiter(void 0, void 0, v
 exports.addPeopleFavorite = addPeopleFavorite;
 //AGREGA UN PLANETA A FAVORITOS
 var addPlanetFavorite = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var planetRepo, userRepo, favoriteRepo, user_id, planet, fav, user, favorite, newFavorite, results;
+    var planetRepo, userRepo, favoriteRepo, user_id, planet, user, fav, favorite, newFavorite, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 planetRepo = typeorm_1.getRepository(Planet_1.Planet);
                 userRepo = typeorm_1.getRepository(Users_1.Users);
                 favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
-                user_id = req.user.id;
+                user_id = req.user.user.id;
                 return [4 /*yield*/, planetRepo.findOne(req.params.planet_id)];
             case 1:
                 planet = _a.sent();
-                return [4 /*yield*/, favoriteRepo.findOne({ where: { planet: planet } })];
-            case 2:
-                fav = _a.sent();
                 return [4 /*yield*/, userRepo.findOne(user_id)];
-            case 3:
+            case 2:
                 user = _a.sent();
+                return [4 /*yield*/, favoriteRepo.findOne({ where: { planet: planet, user: user } })];
+            case 3:
+                fav = _a.sent();
                 if (!planet)
                     throw new utils_1.Exception("Not Planet found");
                 if (!user)
@@ -318,7 +318,7 @@ var deletePeopleFavorite = function (req, res) { return __awaiter(void 0, void 0
                 peopleRepo = typeorm_1.getRepository(People_1.People);
                 userRepo = typeorm_1.getRepository(Users_1.Users);
                 favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
-                user_id = req.user.id;
+                user_id = req.user.user.id;
                 return [4 /*yield*/, peopleRepo.findOne(req.params.people_id)];
             case 1:
                 people = _a.sent();
@@ -351,7 +351,7 @@ var deletePlanetFavorite = function (req, res) { return __awaiter(void 0, void 0
                 planetRepo = typeorm_1.getRepository(Planet_1.Planet);
                 userRepo = typeorm_1.getRepository(Users_1.Users);
                 favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
-                user_id = req.user.id;
+                user_id = req.user.user.id;
                 return [4 /*yield*/, planetRepo.findOne(req.params.planet_id)];
             case 1:
                 planet = _a.sent();

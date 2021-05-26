@@ -105,7 +105,7 @@ export const login = async (req: Request, res: Response): Promise<Response> => {
 //OBTIENE TODOS LOS FAVORITOS DE UN USUARIO
 export const getFavorites = async (req: Request, res: Response): Promise<Response> => {
     const userRepo = getRepository(Users);
-    const user_id = (req.user as ObjectLiteral).id;
+    const user_id = (req.user as ObjectLiteral).user.id;
     const user = await userRepo.findOne(user_id);
     const favorites = await getRepository(Favorite).find({ where: { user: user }, relations: ['people', 'planet']});
     return res.json(favorites);
@@ -116,10 +116,10 @@ export const addPeopleFavorite = async (req: Request, res: Response): Promise<Re
     const peopleRepo = getRepository(People);
     const userRepo = getRepository(Users);
     const favoriteRepo = getRepository(Favorite);
-    const user_id = (req.user as ObjectLiteral).id;
+    const user_id = (req.user as ObjectLiteral).user.id;
     const people = await peopleRepo.findOne(req.params.people_id);
-    const fav = await favoriteRepo.findOne({ where: {people: people} });
     const user = await userRepo.findOne(user_id);
+    const fav = await favoriteRepo.findOne({ where: {people: people, user:user} });
     if(!people) throw new Exception("Not People found");
     if(!user) throw new Exception("Not User found");
     if(fav) throw new Exception("Favorite already exists");
@@ -137,10 +137,10 @@ export const addPlanetFavorite = async (req: Request, res: Response): Promise<Re
     const planetRepo = getRepository(Planet);
     const userRepo = getRepository(Users);
     const favoriteRepo = getRepository(Favorite);
-    const user_id = (req.user as ObjectLiteral).id;
+    const user_id = (req.user as ObjectLiteral).user.id;
     const planet = await planetRepo.findOne(req.params.planet_id);
-    const fav = await favoriteRepo.findOne({ where: {planet: planet} });
     const user = await userRepo.findOne(user_id);
+    const fav = await favoriteRepo.findOne({ where: {planet: planet, user:user} });
     if(!planet) throw new Exception("Not Planet found");
     if(!user) throw new Exception("Not User found");
     if(fav) throw new Exception("Favorite already exists");
@@ -158,7 +158,7 @@ export const deletePeopleFavorite = async (req: Request, res: Response): Promise
     const peopleRepo = getRepository(People);
     const userRepo = getRepository(Users);
     const favoriteRepo = getRepository(Favorite);
-    const user_id = (req.user as ObjectLiteral).id;
+    const user_id = (req.user as ObjectLiteral).user.id;
     const people = await peopleRepo.findOne(req.params.people_id);
     const fav = await favoriteRepo.findOne({ where: {people: people} });
     const user = await userRepo.findOne(user_id);
@@ -175,7 +175,7 @@ export const deletePlanetFavorite = async (req: Request, res: Response): Promise
     const planetRepo = getRepository(Planet);
     const userRepo = getRepository(Users);
     const favoriteRepo = getRepository(Favorite);
-    const user_id = (req.user as ObjectLiteral).id;
+    const user_id = (req.user as ObjectLiteral).user.id;
     const planet = await planetRepo.findOne(req.params.planet_id);
     const fav = await favoriteRepo.findOne({ where: {planet: planet} });
     const user = await userRepo.findOne(user_id);
