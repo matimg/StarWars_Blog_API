@@ -12,31 +12,31 @@ export class People extends BaseEntity {
     @Column()
     name: string;
 
-    @Column()
+    @Column({nullable: true})
     birth_year: string;
 
-    @Column()
+    @Column({nullable: true})
     gender: string;
 
-    @Column()
+    @Column({nullable: true})
     height: string;
 
-    @Column()
+    @Column({nullable: true})
     mass: number;
 
-    @Column()
+    @Column({nullable: true})
     hair_color: string;
 
-    @Column()
+    @Column({nullable: true})
     skin_color: string;
 
-    @Column()
+    @Column({nullable: true})
     eye_color: string;
 
     @Column()
     description: string;
 
-    @Column()
+    @Column({nullable: true})
     urlImage: string;
 
     @OneToMany(() => Favorite, favorite => favorite.people)

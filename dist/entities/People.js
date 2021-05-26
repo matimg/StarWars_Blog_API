@@ -41,31 +41,31 @@ var People = /** @class */ (function (_super) {
         __metadata("design:type", String)
     ], People.prototype, "name");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
     ], People.prototype, "birth_year");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
     ], People.prototype, "gender");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
     ], People.prototype, "height");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", Number)
     ], People.prototype, "mass");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
     ], People.prototype, "hair_color");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
     ], People.prototype, "skin_color");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
     ], People.prototype, "eye_color");
     __decorate([
@@ -73,7 +73,7 @@ var People = /** @class */ (function (_super) {
         __metadata("design:type", String)
     ], People.prototype, "description");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
     ], People.prototype, "urlImage");
     __decorate([

@@ -41,35 +41,35 @@ var Planet = /** @class */ (function (_super) {
         __metadata("design:type", String)
     ], Planet.prototype, "name");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", Number)
     ], Planet.prototype, "diameter");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", Number)
     ], Planet.prototype, "rotation_period");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", Number)
     ], Planet.prototype, "orbital_period");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Planet.prototype, "gravity");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", Number)
     ], Planet.prototype, "population");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Planet.prototype, "climate");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Planet.prototype, "terrain");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", Number)
     ], Planet.prototype, "surface_water");
     __decorate([
@@ -77,7 +77,7 @@ var Planet = /** @class */ (function (_super) {
         __metadata("design:type", String)
     ], Planet.prototype, "description");
     __decorate([
-        typeorm_1.Column(),
+        typeorm_1.Column({ nullable: true }),
         __metadata("design:type", String)
     ], Planet.prototype, "urlImage");
     __decorate([

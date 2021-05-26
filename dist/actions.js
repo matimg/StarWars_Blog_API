@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.deletePlanetFavorite = exports.deletePeopleFavorite = exports.addPlanetFavorite = exports.addPeopleFavorite = exports.getFavorites = exports.login = exports.createPlanet = exports.getOnePlanet = exports.getPlanets = exports.createPeople = exports.getOnePeople = exports.getPeoples = exports.getUsers = exports.createUser = void 0;
+exports.deletePlanetFavorite = exports.deletePeopleFavorite = exports.addPlanetFavorite = exports.addPeopleFavorite = exports.getFavorites = exports.login = exports.createPlanet = exports.getOnePlanet = exports.getPlanets = exports.createPeople = exports.getOnePeople = exports.getPeoples = exports.getOneUser = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
@@ -88,6 +88,21 @@ var getUsers = function (req, res) { return __awaiter(void 0, void 0, void 0, fu
     });
 }); };
 exports.getUsers = getUsers;
+//OBTIENE UN USUARIO POR ID
+var getOneUser = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0: return [4 /*yield*/, typeorm_1.getRepository(Users_1.Users).findOne(req.params.id_user)];
+            case 1:
+                user = _a.sent();
+                if (!user)
+                    throw new utils_1.Exception("User not exist");
+                return [2 /*return*/, res.json(user)];
+        }
+    });
+}); };
+exports.getOneUser = getOneUser;
 //OBTIENE TODOS LOS PERSONAJES
 var getPeoples = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var peoples;
@@ -122,6 +137,9 @@ var createPeople = function (req, res) { return __awaiter(void 0, void 0, void 0
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
+                //VALIDO QUE EL BODY NO VENGA VACIO
+                if (!req.body.length)
+                    throw new utils_1.Exception("Please provide a body");
                 peopleRepo = typeorm_1.getRepository(People_1.People);
                 i = 0;
                 _a.label = 1;
@@ -136,7 +154,7 @@ var createPeople = function (req, res) { return __awaiter(void 0, void 0, void 0
             case 2:
                 people = _a.sent();
                 if (people)
-                    throw new utils_1.Exception("People already exists with this name:" + req.body[i].name);
+                    throw new utils_1.Exception("People already exists with this name: " + req.body[i].name);
                 newPeople = typeorm_1.getRepository(People_1.People).create(req.body[i]);
                 return [4 /*yield*/, typeorm_1.getRepository(People_1.People).save(newPeople)];
             case 3:
@@ -145,7 +163,7 @@ var createPeople = function (req, res) { return __awaiter(void 0, void 0, void 0
             case 4:
                 i++;
                 return [3 /*break*/, 1];
-            case 5: return [2 /*return*/, res.json({ "message": "peoples created" })];
+            case 5: return [2 /*return*/, res.json({ "message": "Peoples created" })];
         }
     });
 }); };
@@ -180,24 +198,37 @@ var getOnePlanet = function (req, res) { return __awaiter(void 0, void 0, void 0
 exports.getOnePlanet = getOnePlanet;
 //CREA UN PLANETA
 var createPlanet = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var planetRepo, planet, newPlanet, results;
+    var planetRepo, i, planet, newPlanet, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
-                // important validations to avoid ambiguos errors, the client needs to understand what went wrong
-                if (!req.body.name)
-                    throw new utils_1.Exception("Please provide a name");
+                //VALIDO QUE EL BODY NO VENGA VACIO
+                if (!req.body.length)
+                    throw new utils_1.Exception("Please provide a body");
                 planetRepo = typeorm_1.getRepository(Planet_1.Planet);
-                return [4 /*yield*/, planetRepo.findOne({ where: { name: req.body.name } })];
+                i = 0;
+                _a.label = 1;
             case 1:
+                if (!(i < req.body.length)) return [3 /*break*/, 5];
+                //VALIDO QUE EL PERSONAJE DE LA POSICION i TENGA UN NOMBRE Y UNA DESCRIPCION
+                if (!req.body[i].name)
+                    throw new utils_1.Exception("Please provide a name");
+                if (!req.body[i].description)
+                    throw new utils_1.Exception("Please provide a description");
+                return [4 /*yield*/, planetRepo.findOne({ where: { name: req.body[i].name } })];
+            case 2:
                 planet = _a.sent();
                 if (planet)
-                    throw new utils_1.Exception("Planet already exists with this name");
-                newPlanet = typeorm_1.getRepository(Planet_1.Planet).create(req.body);
+                    throw new utils_1.Exception("Planet already exists with this name: " + req.body[i].name);
+                newPlanet = typeorm_1.getRepository(Planet_1.Planet).create(req.body[i]);
                 return [4 /*yield*/, typeorm_1.getRepository(Planet_1.Planet).save(newPlanet)];
-            case 2:
+            case 3:
                 results = _a.sent();
-                return [2 /*return*/, res.json(results)];
+                _a.label = 4;
+            case 4:
+                i++;
+                return [3 /*break*/, 1];
+            case 5: return [2 /*return*/, res.json({ "message": "Planets created" })];
         }
     });
 }); };

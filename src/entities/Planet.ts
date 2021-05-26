@@ -12,34 +12,34 @@ export class Planet extends BaseEntity {
     @Column()
     name: string;
 
-    @Column()
+    @Column({nullable: true})
     diameter: number;
 
-    @Column()
+    @Column({nullable: true})
     rotation_period: number;
 
-    @Column()
+    @Column({nullable: true})
     orbital_period: number;
 
-    @Column()
+    @Column({nullable: true})
     gravity: string;
 
-    @Column()
+    @Column({nullable: true})
     population: number;
 
-    @Column()
+    @Column({nullable: true})
     climate: string;
 
-    @Column()
+    @Column({nullable: true})
     terrain: string;
 
-    @Column()
+    @Column({nullable: true})
     surface_water: number;
 
     @Column()
     description: string;
 
-    @Column()
+    @Column({nullable: true})
     urlImage: string;
 
     @OneToMany(() => Favorite, favorite => favorite.planet)

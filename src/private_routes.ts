@@ -23,7 +23,7 @@ const router = Router();
 const verifyToken= (req: Request,res:Response, next:NextFunction) =>{
     //headers con el token
     const token = req.header('Authorization');
-    if(!token) return res.status(400).json('ACCESS DENIED');
+    if(!token) return res.status(400).json({'message':'ACCESS DENIED'});
 
     const decoded = jwt.verify(token as string, process.env.JWT_KEY as string)
     req.user = decoded;
@@ -31,13 +31,15 @@ const verifyToken= (req: Request,res:Response, next:NextFunction) =>{
     next()
 }
 
+//USUARIOS
 router.get('/user',verifyToken, safe(actions.getUsers));
+router.get('/user/:id_user',verifyToken, safe(actions.getOneUser));
 //FAVORITOS
 router.get('/users/favorites',verifyToken, safe(actions.getFavorites));
 //FAVORITOS-PERSONAJES
 router.post('/favorite/people/:people_id',verifyToken, safe(actions.addPeopleFavorite));
 router.delete('/favorite/people/:people_id',verifyToken, safe(actions.deletePeopleFavorite));
-//FAVORITOS PLANETAS
+//FAVORITOS-PLANETAS
 router.post('/favorite/planet/:planet_id',verifyToken, safe(actions.addPlanetFavorite));
 router.delete('/favorite/planet/:planet_id',verifyToken, safe(actions.deletePlanetFavorite));
 
