@@ -152,3 +152,37 @@ export const addPlanetFavorite = async (req: Request, res: Response): Promise<Re
     const results = await getRepository(Favorite).save(newFavorite); //Grabo el nuevo favorito
     return res.json(results);
 }
+
+//BORRA PERSONAJE FAVORITO
+export const deletePeopleFavorite = async (req: Request, res: Response): Promise<Response> => {
+    const peopleRepo = getRepository(People);
+    const userRepo = getRepository(Users);
+    const favoriteRepo = getRepository(Favorite);
+    const user_id = (req.user as ObjectLiteral).id;
+    const people = await peopleRepo.findOne(req.params.people_id);
+    const fav = await favoriteRepo.findOne({ where: {people: people} });
+    const user = await userRepo.findOne(user_id);
+    if(!people) throw new Exception("Not People found");
+    if(!user) throw new Exception("Not User found");
+    if(!fav) throw new Exception("Favorite not exists");
+
+    const result = await getRepository(Favorite).delete(fav.id);
+    return res.json(result);
+}
+
+//BORRA PLANETA FAVORITO
+export const deletePlanetFavorite = async (req: Request, res: Response): Promise<Response> => {
+    const planetRepo = getRepository(Planet);
+    const userRepo = getRepository(Users);
+    const favoriteRepo = getRepository(Favorite);
+    const user_id = (req.user as ObjectLiteral).id;
+    const planet = await planetRepo.findOne(req.params.planet_id);
+    const fav = await favoriteRepo.findOne({ where: {planet: planet} });
+    const user = await userRepo.findOne(user_id);
+    if(!planet) throw new Exception("Not Planet found");
+    if(!user) throw new Exception("Not User found");
+    if(!fav) throw new Exception("Favorite not exists");
+
+    const result = await getRepository(Favorite).delete(fav.id);
+    return res.json(result);
+}

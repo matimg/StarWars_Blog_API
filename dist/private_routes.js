@@ -55,6 +55,8 @@ router.get('/user', verifyToken, utils_1.safe(actions.getUsers));
 router.get('/users/favorites', verifyToken, utils_1.safe(actions.getFavorites));
 //FAVORITOS-PERSONAJES
 router.post('/favorite/people/:people_id', verifyToken, utils_1.safe(actions.addPeopleFavorite));
+router["delete"]('/favorite/people/:people_id', verifyToken, utils_1.safe(actions.deletePeopleFavorite));
 //FAVORITOS PLANETAS
 router.post('/favorite/planet/:planet_id', verifyToken, utils_1.safe(actions.addPlanetFavorite));
+router["delete"]('/favorite/planet/:planet_id', verifyToken, utils_1.safe(actions.deletePlanetFavorite));
 exports["default"] = router;

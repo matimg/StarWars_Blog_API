@@ -39,7 +39,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 exports.__esModule = true;
-exports.addPlanetFavorite = exports.addPeopleFavorite = exports.getFavorites = exports.login = exports.createPlanet = exports.getOnePlanet = exports.getPlanets = exports.createPeople = exports.getOnePeople = exports.getPeoples = exports.getUsers = exports.createUser = void 0;
+exports.deletePlanetFavorite = exports.deletePeopleFavorite = exports.addPlanetFavorite = exports.addPeopleFavorite = exports.getFavorites = exports.login = exports.createPlanet = exports.getOnePlanet = exports.getPlanets = exports.createPeople = exports.getOnePeople = exports.getPeoples = exports.getUsers = exports.createUser = void 0;
 var typeorm_1 = require("typeorm"); // getRepository"  traer una tabla de la base de datos asociada al objeto
 var Users_1 = require("./entities/Users");
 var utils_1 = require("./utils");
@@ -309,3 +309,69 @@ var addPlanetFavorite = function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); };
 exports.addPlanetFavorite = addPlanetFavorite;
+//BORRA PERSONAJE FAVORITO
+var deletePeopleFavorite = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var peopleRepo, userRepo, favoriteRepo, user_id, people, fav, user, result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                peopleRepo = typeorm_1.getRepository(People_1.People);
+                userRepo = typeorm_1.getRepository(Users_1.Users);
+                favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
+                user_id = req.user.id;
+                return [4 /*yield*/, peopleRepo.findOne(req.params.people_id)];
+            case 1:
+                people = _a.sent();
+                return [4 /*yield*/, favoriteRepo.findOne({ where: { people: people } })];
+            case 2:
+                fav = _a.sent();
+                return [4 /*yield*/, userRepo.findOne(user_id)];
+            case 3:
+                user = _a.sent();
+                if (!people)
+                    throw new utils_1.Exception("Not People found");
+                if (!user)
+                    throw new utils_1.Exception("Not User found");
+                if (!fav)
+                    throw new utils_1.Exception("Favorite not exists");
+                return [4 /*yield*/, typeorm_1.getRepository(Favorite_1.Favorite)["delete"](fav.id)];
+            case 4:
+                result = _a.sent();
+                return [2 /*return*/, res.json(result)];
+        }
+    });
+}); };
+exports.deletePeopleFavorite = deletePeopleFavorite;
+//BORRA PLANETA FAVORITO
+var deletePlanetFavorite = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var planetRepo, userRepo, favoriteRepo, user_id, planet, fav, user, result;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                planetRepo = typeorm_1.getRepository(Planet_1.Planet);
+                userRepo = typeorm_1.getRepository(Users_1.Users);
+                favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
+                user_id = req.user.id;
+                return [4 /*yield*/, planetRepo.findOne(req.params.planet_id)];
+            case 1:
+                planet = _a.sent();
+                return [4 /*yield*/, favoriteRepo.findOne({ where: { planet: planet } })];
+            case 2:
+                fav = _a.sent();
+                return [4 /*yield*/, userRepo.findOne(user_id)];
+            case 3:
+                user = _a.sent();
+                if (!planet)
+                    throw new utils_1.Exception("Not Planet found");
+                if (!user)
+                    throw new utils_1.Exception("Not User found");
+                if (!fav)
+                    throw new utils_1.Exception("Favorite not exists");
+                return [4 /*yield*/, typeorm_1.getRepository(Favorite_1.Favorite)["delete"](fav.id)];
+            case 4:
+                result = _a.sent();
+                return [2 /*return*/, res.json(result)];
+        }
+    });
+}); };
+exports.deletePlanetFavorite = deletePlanetFavorite;
