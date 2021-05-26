@@ -237,30 +237,35 @@ var getFavorites = function (req, res) { return __awaiter(void 0, void 0, void 0
 exports.getFavorites = getFavorites;
 //AGREGA UN PERSONAJE A FAVORITOS
 var addPeopleFavorite = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var peopleRepo, userRepo, user_id, people, user, favoriteRepo, favorite, newFavorite, results;
+    var peopleRepo, userRepo, favoriteRepo, user_id, people, fav, user, favorite, newFavorite, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 peopleRepo = typeorm_1.getRepository(People_1.People);
                 userRepo = typeorm_1.getRepository(Users_1.Users);
+                favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
                 user_id = req.user.id;
-                return [4 /*yield*/, peopleRepo.findOne(req.params.id_people)];
+                return [4 /*yield*/, peopleRepo.findOne(req.params.people_id)];
             case 1:
                 people = _a.sent();
-                return [4 /*yield*/, userRepo.findOne(user_id)];
+                return [4 /*yield*/, favoriteRepo.findOne({ where: { people: people } })];
             case 2:
+                fav = _a.sent();
+                return [4 /*yield*/, userRepo.findOne(user_id)];
+            case 3:
                 user = _a.sent();
                 if (!people)
                     throw new utils_1.Exception("Not People found");
                 if (!user)
                     throw new utils_1.Exception("Not User found");
-                favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
+                if (fav)
+                    throw new utils_1.Exception("Favorite already exists");
                 favorite = new Favorite_1.Favorite();
                 favorite.user = user;
                 favorite.people = people;
                 newFavorite = typeorm_1.getRepository(Favorite_1.Favorite).create(favorite);
                 return [4 /*yield*/, typeorm_1.getRepository(Favorite_1.Favorite).save(newFavorite)];
-            case 3:
+            case 4:
                 results = _a.sent();
                 return [2 /*return*/, res.json(results)];
         }
@@ -269,30 +274,35 @@ var addPeopleFavorite = function (req, res) { return __awaiter(void 0, void 0, v
 exports.addPeopleFavorite = addPeopleFavorite;
 //AGREGA UN PLANETA A FAVORITOS
 var addPlanetFavorite = function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var planetRepo, userRepo, user_id, planet, user, favoriteRepo, favorite, newFavorite, results;
+    var planetRepo, userRepo, favoriteRepo, user_id, planet, fav, user, favorite, newFavorite, results;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
                 planetRepo = typeorm_1.getRepository(Planet_1.Planet);
                 userRepo = typeorm_1.getRepository(Users_1.Users);
+                favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
                 user_id = req.user.id;
-                return [4 /*yield*/, planetRepo.findOne(req.params.id_planet)];
+                return [4 /*yield*/, planetRepo.findOne(req.params.planet_id)];
             case 1:
                 planet = _a.sent();
-                return [4 /*yield*/, userRepo.findOne(user_id)];
+                return [4 /*yield*/, favoriteRepo.findOne({ where: { planet: planet } })];
             case 2:
+                fav = _a.sent();
+                return [4 /*yield*/, userRepo.findOne(user_id)];
+            case 3:
                 user = _a.sent();
                 if (!planet)
                     throw new utils_1.Exception("Not Planet found");
                 if (!user)
                     throw new utils_1.Exception("Not User found");
-                favoriteRepo = typeorm_1.getRepository(Favorite_1.Favorite);
+                if (fav)
+                    throw new utils_1.Exception("Favorite already exists");
                 favorite = new Favorite_1.Favorite();
                 favorite.user = user;
                 favorite.planet = planet;
                 newFavorite = typeorm_1.getRepository(Favorite_1.Favorite).create(favorite);
                 return [4 /*yield*/, typeorm_1.getRepository(Favorite_1.Favorite).save(newFavorite)];
-            case 3:
+            case 4:
                 results = _a.sent();
                 return [2 /*return*/, res.json(results)];
         }
